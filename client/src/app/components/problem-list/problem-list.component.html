@@ -1,0 +1,13 @@
+
+<div class="container">
+  <app-navbar></app-navbar>
+  <app-add-problem></app-add-problem>
+  <div class="list-group">
+    <a class="list-group-item" *ngFor="let prob of problems" [routerLink]="['/problems',prob.id]" routerLinkActive="active">
+      <span class="{{'pull-left label difficulty diff-' + prob.difficulty.toLocaleLowerCase()}}">
+        {{prob.difficulty}}
+      </span>
+      <strong class="title">{{prob.id}}. {{prob.name}}</strong>
+    </a>
+  </div>
+</div>
