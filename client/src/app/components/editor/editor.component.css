@@ -1,0 +1,25 @@
+@media screen {
+  #editor {
+    height:400px;
+    font-size: 15px;
+  }
+
+  .lang-select {
+    width: 100px;
+    margin-right: 30px;
+  }
+
+  header .btn {
+    margin: 0 5px;
+  }
+
+  .editor-header {
+    margin-bottom: 20px;
+  }
+  .cursor {
+    /*position:absolute;*/
+    background: rgba(0, 250, 0, 0.5);
+    z-index: 40;
+    width: 2px!important
+  }
+}

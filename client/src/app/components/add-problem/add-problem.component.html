@@ -10,7 +10,7 @@
       <div class="form-group col-md-4">
         <label for="difficulty">Problem Level</label>
         <select id="difficulty" name="difficulty" class="form-control"
-                required placeholder="Name your problem" [(ngModel)]="newproblem.difficulty">
+                required [(ngModel)]="newproblem.difficulty">
           <option value="" selected disabled>select level</option>
           <option *ngFor="let lvl of difficulties" [value]="lvl">{{lvl}}</option>
         </select>

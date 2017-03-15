@@ -15,6 +15,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { AddProblemComponent } from './components/add-problem/add-problem.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import {AuthGuardService} from "./services/auth-guard.service";
+import { EditorComponent } from './components/editor/editor.component';
+import {CollaborationService} from "./services/collaboration.service";
 
 
 @NgModule({
@@ -25,6 +27,7 @@ import {AuthGuardService} from "./services/auth-guard.service";
     NavbarComponent,
     AddProblemComponent,
     ProfileComponent,
+    EditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import {AuthGuardService} from "./services/auth-guard.service";
   providers: [
     DataService,
     AuthService,
-    AuthGuardService
+    AuthGuardService,
+    CollaborationService
   ],
   bootstrap: [AppComponent]
 })
