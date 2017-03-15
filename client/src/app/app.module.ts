@@ -10,10 +10,11 @@ import { ProblemListComponent } from './components/problem-list/problem-list.com
 import { ProblemComponent } from './components/problem/problem.component';
 
 import {DataService} from './services/data.service';
-//import {AuthService} from './services/auth.service';
+import {AuthService} from './services/auth.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AddProblemComponent } from './components/add-problem/add-problem.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import {AuthGuardService} from "./services/auth-guard.service";
 
 
 @NgModule({
@@ -32,7 +33,9 @@ import { ProfileComponent } from './components/profile/profile.component';
     RouterModule.forRoot(routes)
   ],
   providers: [
-    DataService
+    DataService,
+    AuthService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })

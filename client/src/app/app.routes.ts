@@ -2,6 +2,7 @@ import {Routes} from '@angular/router';
 import {ProblemListComponent} from "./components/problem-list/problem-list.component";
 import {ProblemComponent} from "./components/problem/problem.component";
 import {ProfileComponent} from "./components/profile/profile.component";
+import {AuthGuardService} from "./services/auth-guard.service";
 
 export const routes: Routes = [
   {
@@ -20,7 +21,8 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: '**',

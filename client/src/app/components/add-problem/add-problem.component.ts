@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Problem} from "../../problems/problem.model";
 import {DataService} from "../../services/data.service";
+import {AuthGuardService} from "../../services/auth-guard.service";
 
 
 const BLANKPROB: Problem = Object.freeze({
@@ -20,7 +21,7 @@ export class AddProblemComponent implements OnInit {
   difficulties: string[] = ['easy', 'medium', 'hard'];
   newproblem: Problem = Object.assign({}, BLANKPROB);
 
-  constructor(private DataService: DataService) { }
+  constructor(private DataService: DataService, private authGuard: AuthGuardService) { }
 
   ngOnInit() {
   }

@@ -9,13 +9,13 @@ let Auth0Lock: any = require('auth0-lock').default;
 @Injectable()
 export class AuthService {
   // Configure Auth0
-  auth0ClientID = 'nUNxFRJrlgV384L9NqSRcaOREcAlaEl5';
+  auth0ClientID = 'ENuML5Jk0hFz12Z6uTJHACSWanCufq8o';
   auth0clientDomain = 'learnonlinejudge.auth0.com';
   options = {
     // https://auth0.com/docs/libraries/lock/v10/customization#auth-object-
     auth: {
       // params: {scope: 'openid nickname'},  // https://auth0.com/docs/libraries/lock/v10/sending-authentication-parameters
-      // redirectUrl: 'http://localhost:3000', // this will set redirect url to localhost3000
+      //redirectUrl: 'http://localhost:3000', // this will set redirect url to localhost3000
       redirect: false, // this will turn off any redirection
       responseType: 'token',
       // turn of single sign on. turn on sso will generate two data in localstorage
@@ -69,7 +69,7 @@ export class AuthService {
     if(localStorage.getItem("profile") != null){
       return JSON.parse(localStorage.getItem("profile"));
     } else {
-      console.log("no profile saved in localstorage");
+      //console.log("no profile saved in localstorage");
       return null;
     }
   }
