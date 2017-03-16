@@ -4,17 +4,25 @@ declare var io: any; // import socket io
 
 @Injectable()
 export class CollaborationService {
-  collaborationbSocket: any;
+  socket: any;
   constructor() { }
 
-  init(){
+  init(problemID: string){
     // setup socket and send msg
-    this.collaborationbSocket = io(window.location.origin, {query: 'msg=' + '123'});
+    this.socket = io(window.location.origin, {query: 'problemID=' + problemID});
 
-    // receive msg
-    this.collaborationbSocket.on('message', (msg)=>{
+    // receive test msg
+    this.socket.on("message", (msg)=>{
       console.log(msg);
     });
+
+    this.socket.on("change", (delta)=>{
+      console.log("rcv change from server: \n" + delta);
+    });
+  }
+
+  change(delta: string): void{
+    this.socket.emit("change", delta);
   }
 
 }

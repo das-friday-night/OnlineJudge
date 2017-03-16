@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CollaborationService} from "../../services/collaboration.service";
+import {ActivatedRoute} from "@angular/router";
 
 declare var ace: any; // import ace
 
@@ -28,7 +29,7 @@ export class EditorComponent implements OnInit {
     def example():
         # Write your Python code here`
   }
-  aceLangName = {
+  aceModeName = {
     'Java': 'java',
     'C++': 'c_cpp',
     'Python': 'python'
@@ -37,19 +38,38 @@ export class EditorComponent implements OnInit {
   editor: any;
   lang: string = "Java";
 
-  constructor(private collaboration: CollaborationService) { }
+  constructor(private collaboration: CollaborationService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.editor = ace.edit("editor");
     this.editor.setTheme("ace/theme/xcode");
     this.resetEditor();
+    // avoid bug when editor holds too many chars that out of buffer
     this.editor.$blockScrolling = Infinity;
-    this.collaboration.init();
+    this.editor.lastChangeLog = null;
+
+    this.editor.on("change", (e)=>{
+      let changeInfo = JSON.stringify(e);
+      console.log(changeInfo);
+      if(this.editor.lastChangeLog != e){
+        this.editor.lastChangeLog = e;
+        this.collaboration.change(changeInfo);
+      }
+    });
+
+    this.route.params.subscribe(params => {
+      this.collaboration.init(params['id']);
+
+    });
+
   }
 
   resetEditor() {
-    this.editor.getSession().setMode("ace/mode/"+this.aceLangName[this.lang]);
+    this.editor.getSession().setMode("ace/mode/"+this.aceModeName[this.lang]);
     this.editor.setValue(this.defaultContent[this.lang]);
+    // move cursor to first line
+    this.editor.gotoLine(0);
   }
 
   setLanguage() {
