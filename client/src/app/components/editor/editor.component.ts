@@ -44,7 +44,7 @@ export class EditorComponent implements OnInit {
     this.editor.setTheme("ace/theme/xcode");
     this.resetEditor();
     this.editor.$blockScrolling = Infinity;
-    // this.collaboration.init();
+    this.collaboration.init();
   }
 
   resetEditor() {
