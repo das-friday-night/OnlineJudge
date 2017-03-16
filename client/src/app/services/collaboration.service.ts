@@ -7,20 +7,25 @@ export class CollaborationService {
   socket: any;
   constructor() { }
 
-  init(problemID: string){
+  init(editor: any, problemID: string){
     // setup socket and send msg
     this.socket = io(window.location.origin, {query: 'problemID=' + problemID});
 
-    // receive test msg
-    this.socket.on("message", (msg)=>{
-      console.log(msg);
+    // receive change from server
+    this.socket.on("change", (delta: string)=>{
+      console.log("rcv change: \n" + delta);
+      let change = JSON.parse(delta);
+      editor.lastChangeLog = change;
+      editor.getSession().getDocument().applyDeltas([change]);
     });
 
-    this.socket.on("change", (delta)=>{
-      console.log("rcv change from server: \n" + delta);
+    // receive test msg
+    this.socket.on("rcv message", (msg: string)=>{
+      console.log(msg);
     });
   }
 
+  // send change to server
   change(delta: string): void{
     this.socket.emit("change", delta);
   }

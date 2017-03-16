@@ -59,7 +59,7 @@ export class EditorComponent implements OnInit {
     });
 
     this.route.params.subscribe(params => {
-      this.collaboration.init(params['id']);
+      this.collaboration.init(this.editor, params['id']);
 
     });
 

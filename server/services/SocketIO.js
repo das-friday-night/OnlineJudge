@@ -13,7 +13,7 @@ module.exports = function(io) {
             if(debugMode) console.log("***********new room open:\n" + JSON.stringify(rooms));
         } else {
             rooms[roomID].members.push(socket.id);
-            if(debugMode) console.log("enter room: \n" + socket.id + "->" + roomID + ". " + JSON.stringify(rooms));
+            if(debugMode) console.log("***********enter room: \n" + socket.id + "->" + roomID + ". " + JSON.stringify(rooms));
         }
 
         socket.on("change", function(delta) {
@@ -24,7 +24,11 @@ module.exports = function(io) {
                 return;
             }
             mems.forEach(socketID=>{
-                io.to(socketID).emit("change", delta);
+                if(socketID != socket.id) {
+                    // Attentio: this if condition is necessary otherwise client who made the change
+                    // will rcv and perform another same change 
+                    io.to(socketID).emit("change", delta);
+                }
             });
         });
 
