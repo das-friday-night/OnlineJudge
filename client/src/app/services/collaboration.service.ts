@@ -19,15 +19,22 @@ export class CollaborationService {
     this.socket.on("changeText", (delta: string)=>{
       console.log("rcv change text: \n" + delta);
       delta = JSON.parse(delta);
+      // !!!IMPORTANT:
+      // editor.lastChangeLog = delta; is required at this position
+      // in another word, it must excute before editor make further change.
+      // otherwise, editor.lastChangeLog won't update, a infinite loop of
+      // talks between sender and reciever will continue forever.
       editor.lastChangeLog = delta;
       editor.getSession().getDocument().applyDeltas([delta]);
     });
 
     this.socket.on("changeCursor", (cursor: string)=>{
-      console.log("rcv change text: \n" + cursor);
+      console.log("rcv change cursor: \n" + cursor);
       cursor = JSON.parse(cursor);
       let id = cursor['socketID'];
       if(this.collaborators[id]){
+        // marker is a highlight area. we use marker to simulate cursor
+        // because ace don't support multi-cursor
         editor.getSession().removeMarker(this.collaborators[id]['marker']);
       } else {
         this.collaborators[id] = {};
@@ -49,17 +56,16 @@ export class CollaborationService {
 
     // (test) receive msg
     this.socket.on("message", (msg: string)=>{
-      console.log("rcv change text: " + msg);
+      console.log("rcv message: " + msg);
     });
+
+    // ask server for newest change records on editor(performed by other clients)
+    this.socket.emit("loadRecords");
   }
 
   // send change to server
   change(changeObj: string, changeInfo: string): void{
-    if(changeInfo){
       this.socket.emit(changeObj, changeInfo);
-    } else {
-      this.socket.emit(changeObj);
-    }
   }
 
 }

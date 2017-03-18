@@ -51,7 +51,8 @@ export class EditorComponent implements OnInit {
 
     this.editor.on("change", (e)=>{
       let changeInfo = JSON.stringify(e);
-      console.log(changeInfo);
+      console.log("editor.on(change):\n"+changeInfo);
+      console.log("editor.lastChangeLog:\n"+JSON.stringify(this.editor.lastChangeLog));
       if(this.editor.lastChangeLog != e){
         this.editor.lastChangeLog = e;
         this.collaboration.change("text", changeInfo);
