@@ -1,3 +1,4 @@
+// Data Structure:
 // socketIDToRoomID: {socketID : roomID}
 // rooms:  { roomID : {
 //                      changeRecords: [changes],
@@ -6,22 +7,24 @@
 //         }
 
 var redisService = require("./redisService");
+const DEBUGMODE = true;
+const VERBOSEMODE = false;
+const EXPIRED_IN_SEC = 60;
 
 module.exports = function(io) {
-    const debugMode = true;
-    const verboseMode = false;
     var socketIDToRoomID = {};
     var rooms = {};
     io.on("connection", function(socket) {
 
+        // on ENTER
         // things to do at socket first connection
         let roomID = socket.handshake.query["problemID"];
         socketIDToRoomID[socket.id] = roomID;
         if(!rooms[roomID]){
-            redisService.get("roomID", function(changeRecords){
+            redisService.get(roomID, function(changeRecords){
                 if(changeRecords){
-                    if(debugMode) console.log("***********load change records from redis:\n");
-                    if(verboseMode) console.log(changeRecords);
+                    if(DEBUGMODE) console.log("***********Load Redis records");
+                    if(VERBOSEMODE) console.log(changeRecords);
                     rooms[roomID] = {
                         "changeRecords": JSON.parse(changeRecords),
                         "members": [socket.id]
@@ -29,26 +32,49 @@ module.exports = function(io) {
 
                     // TODO send sequence change make socket.id up to date
                 } else {
-                    if(debugMode) console.log("***********redis change records not found");
+                    if(DEBUGMODE) console.log("***********Load ZERO Redis records");
                     rooms[roomID] = {
                         "changeRecords": [],
                         "members": [socket.id]
                     };
                 }
-                if(debugMode) console.log("***********new room open:\n" + JSON.stringify(rooms));
+                if(DEBUGMODE) console.log("***********OPEN new room: ["+roomID+"]\n"+rooms[roomID].members);
             });
         } else {
             rooms[roomID].members.push(socket.id);
             // TODO send sequence change make socket.id up to date
-            if(debugMode) console.log("***********enter room:\n" + socket.id + "->" + roomID + ".\n" + rooms[roomID].members);
-            if(verboseMode) console.log(JSON.stringify(rooms));
+            if(DEBUGMODE) console.log("***********Enter room:\n" + socket.id + "->" + roomID + ".\n" + rooms[roomID].members);
+            if(VERBOSEMODE) console.log(JSON.stringify(rooms));
         }
         // ---------------------------------------------
 
+        // on LEAVE
+        socket.on("disconnect", function () {
+            let roomID = socketIDToRoomID[socket.id];
+            let members = rooms[socketIDToRoomID[socket.id]].members;
+            let index = members.indexOf(socket.id);
+            if(index>=0){
+                if(DEBUGMODE) console.log("***********DELETE member: " + socket.id);
+                members.splice(index,1);
+                if(members.length == 0){
+                    // no one in room, save change records to redis and delete room
+                    let val = JSON.stringify(rooms[roomID].changeRecords);
+                    //redisService.set(roomID, val, redisService.redisPrint);
+                    redisService.set(roomID, val, null);
+                    redisService.expire(roomID, EXPIRED_IN_SEC);
+                    delete rooms[roomID];
+                    if(DEBUGMODE) console.log("***********BACKUP records to Redis & DELETE room"+roomID);
+                }
+            }
+            delete socketIDToRoomID[socket.id];
+        });
+        // ---------------------------------------------
+
+
         socket.on("text", function(delta) {
-            if(debugMode) console.log("***********new change text: "+socket.id+"\n"+delta);
+            if(DEBUGMODE) console.log("***********new change text: "+socket.id+"\n"+delta);
             rooms[socketIDToRoomID[socket.id]].changeRecords.push(delta);
-            if(verboseMode) console.log("***********changeRecords:\n"+rooms[socketIDToRoomID[socket.id]].changeRecords);
+            if(VERBOSEMODE) console.log("***********changeRecords:\n"+rooms[socketIDToRoomID[socket.id]].changeRecords);
             broadcast("changeText", delta);
         });
 
@@ -60,9 +86,9 @@ module.exports = function(io) {
 
         socket.on("loadRecords", function () {
             let changeRecords = rooms[socketIDToRoomID[socket.id]].changeRecords;
-            if(debugMode) console.log("***********load records: "+socket.id);
+            if(DEBUGMODE) console.log("***********Load records to: "+socket.id);
             changeRecords.forEach(record => {
-                if(verboseMode) console.log("***********load record:\n" + record);
+                if(VERBOSEMODE) console.log("****Send:\n" + record);
                 socket.emit("changeText", record);
             });
         });
@@ -73,8 +99,7 @@ module.exports = function(io) {
             // dataStr: [string] data to be transmitted.
             let mems = rooms[socketIDToRoomID[socket.id]].members;
             if(!mems) {
-                console.log("***********Server can't broadcast " + eventName +": can't find "
-                    + socket.id + " in any room!");
+                console.log("***********Server CANNOT broadcast "+eventName+": CANNOT find "+socket.id);
                 return;
             }
             mems.forEach(socketID=>{
@@ -82,8 +107,8 @@ module.exports = function(io) {
                     // !!!IMPORTANT:
                     // this if condition is necessary otherwise client who made the change
                     // will rcv and perform another same change
-                    if(debugMode) console.log("***********broadcast to: "+socketID+"\n"+eventName);
-                    if(verboseMode) console.log(dataStr);
+                    if(DEBUGMODE) console.log("***********Broadcast "+eventName+" to: "+socketID);
+                    if(VERBOSEMODE) console.log(dataStr);
                     io.to(socketID).emit(eventName, dataStr);
                 }
             });
