@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth.service";
+import {ProblemListFilterService} from "../../services/problem-list-filter.service";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-navbar',
@@ -9,13 +11,18 @@ import {AuthService} from "../../services/auth.service";
 export class NavbarComponent implements OnInit {
   title:string = "CODE";
   user: string = "";
+  filterWord: FormControl = new FormControl();
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private probFilterService: ProblemListFilterService) { }
 
   ngOnInit() {
     if(this.auth.authenticated()){
       this.user = this.auth.getProfile().nickname;
     }
+
+    this.filterWord.valueChanges.debounceTime(600).subscribe(
+      term => this.probFilterService.setFilterWord(term)
+    );
   }
 
   login(){

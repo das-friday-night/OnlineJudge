@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule} from '@angular/router';
 import { routes } from "./app.routes";
@@ -17,6 +17,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import {AuthGuardService} from "./services/auth-guard.service";
 import { EditorComponent } from './components/editor/editor.component';
 import {CollaborationService} from "./services/collaboration.service";
+import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
+import {ProblemListFilterService} from "./services/problem-list-filter.service";
 
 
 @NgModule({
@@ -28,18 +30,21 @@ import {CollaborationService} from "./services/collaboration.service";
     AddProblemComponent,
     ProfileComponent,
     EditorComponent,
+    ProblemListFilterPipe,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    ReactiveFormsModule
   ],
   providers: [
     DataService,
     AuthService,
     AuthGuardService,
-    CollaborationService
+    CollaborationService,
+    ProblemListFilterService
   ],
   bootstrap: [AppComponent]
 })

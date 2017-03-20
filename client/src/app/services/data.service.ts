@@ -11,6 +11,7 @@ export class DataService {
   constructor(private http: Http) { }
 
   getAllProblems(): Observable<Problem[]> {
+    // http.get() return observable
     this.http.get("api/v1/problems")
       .toPromise()
       .then((res: Response) => {
@@ -29,6 +30,7 @@ export class DataService {
 
   addProblem(newProblem:Problem): Promise<Problem> {
     let headers = new Headers({ 'content-type': 'application/json' });
+    // http.ppost() return observable
     return this.http.post('/api/v1/problems', newProblem, headers)
       .toPromise()
       .then((res: Response) => {
