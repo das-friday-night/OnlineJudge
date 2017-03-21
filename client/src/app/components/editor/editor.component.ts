@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CollaborationService} from "../../services/collaboration.service";
 import {ActivatedRoute} from "@angular/router";
+import {DataService} from "../../services/data.service";
 
 declare var ace: any; // import ace
 
@@ -37,9 +38,11 @@ export class EditorComponent implements OnInit {
 
   editor: any;
   lang: string = "Java";
+  output: string;
 
   constructor(private collaboration: CollaborationService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private data: DataService) { }
 
   ngOnInit() {
     this.editor = ace.edit("editor");
@@ -72,6 +75,7 @@ export class EditorComponent implements OnInit {
     this.editor.setValue(this.defaultContent[this.lang]);
     // move cursor to first line
     this.editor.gotoLine(0);
+    this.output = "";
   }
 
   setLanguage() {
@@ -79,8 +83,14 @@ export class EditorComponent implements OnInit {
   }
 
   submit(){
-    let user_code = this.editor.getValue();
-    console.log(user_code);
+    // let user_code = this.editor.getValue();
+    // console.log(user_code);
+    let testCode = {
+      user_code: this.editor.getValue(),
+      lang: this.lang.toLowerCase()
+    };
+    this.data.buildAndRun(testCode)
+      .then(res => this.output = res.text);
   }
 
 }

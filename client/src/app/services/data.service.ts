@@ -30,11 +30,22 @@ export class DataService {
 
   addProblem(newProblem:Problem): Promise<Problem> {
     let headers = new Headers({ 'content-type': 'application/json' });
-    // http.ppost() return observable
+    // http.post() return observable
     return this.http.post('/api/v1/problems', newProblem, headers)
       .toPromise()
       .then((res: Response) => {
         this.getAllProblems();
+        return res.json();
+      })
+      .catch(this.handleError);
+  }
+
+  buildAndRun(testCode: any): Promise<any>{
+    let headers = new Headers({ 'content-type': 'application/json' });
+    // http.post() return observable
+    return this.http.post('/api/v1/buildrun', testCode, headers)
+      .toPromise()
+      .then((res: Response) => {
         return res.json();
       })
       .catch(this.handleError);
