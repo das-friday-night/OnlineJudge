@@ -14,7 +14,7 @@ function set(key, val, callback){
             console.log(err);
             return;
         }
-        callback(res);
+        if(callback) callback(res);
     });
 }
 

@@ -63,7 +63,7 @@ module.exports = function(io) {
                     redisService.set(roomID, val, null);
                     redisService.expire(roomID, EXPIRED_IN_SEC);
                     delete rooms[roomID];
-                    if(DEBUGMODE) console.log("***********BACKUP records to Redis & DELETE room"+roomID);
+                    if(DEBUGMODE) console.log("***********SAVE records to Redis & DELETE room"+roomID);
                 }
             }
             delete socketIDToRoomID[socket.id];
