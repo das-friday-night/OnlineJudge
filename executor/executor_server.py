@@ -14,7 +14,7 @@ def buildrun():
 		return "code/lang is missing!"
 	code = data['code']
 	lang = data['lang']
-	print "REST: %s in %s language" % (code, lang)
+	print "5000***********: REST: %s in %s language" % (code, lang)
 	result = eu.buildrun(code, lang)
 	return jsonify(result)
 

@@ -65,6 +65,8 @@ def buildrun(code, lang):
             command="%s %s" % (BUILD_COMMANDS[lang], SOURCE_FILE_NAMES[lang]),
             volumes = {source_file_host_dir: {'bind': source_file_guest_dir, 'mode': 'rw'}},
             working_dir=source_file_guest_dir)
+        # volumnes: mount source_file_host_dir to container dir source_file_guest_dir
+        # working_dir: cd ${source_file_guest_dir}
         print "5000***********: Source built SUCCESS."
         result['build'] = 'OK'
     except ContainerError as e:
