@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# NOTE: This shell is used only for development and testing!!
 # prerequisite: npm, pip, nodemon, angular-cli, redis, docker
 
 #kill any process on port 3000
