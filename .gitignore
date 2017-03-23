@@ -10,6 +10,8 @@ tmp/
 # dependencies
 node_modules/
 
+# binary files
+./executor/*.pyc
 
 # IDEs and editors
 .idea/
