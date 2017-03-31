@@ -3,7 +3,6 @@
 ### The instruction of how to install this project is kept in [installation.md](https://github.com/siyuan-li/OnlineJudge/blob/master/installation.md). Please check it out.
 
 ## Here are some demo
-___
 [live demo](http://ec2-54-175-96-121.compute-1.amazonaws.com:3000/problems)
 ---
 ![alt text](https://github.com/siyuan-li/OnlineJudge/blob/master/demos/demo1.gif "Project Demo1")
