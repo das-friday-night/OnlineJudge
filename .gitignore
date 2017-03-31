@@ -2,7 +2,6 @@
 
 # compiled output
 /dist
-/tmp
 tmp/
 
 /public
@@ -11,7 +10,7 @@ tmp/
 node_modules/
 
 # binary files
-./executor/*.pyc
+executor/*.pyc
 
 # IDEs and editors
 .idea/
