@@ -7,7 +7,7 @@
 //         }
 
 var redisService = require("./redisService");
-const DEBUGMODE = true;
+const DEBUGMODE = false;
 const VERBOSEMODE = false;
 const EXPIRED_IN_SEC = 60;
 

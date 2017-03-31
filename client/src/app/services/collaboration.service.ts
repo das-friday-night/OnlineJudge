@@ -3,6 +3,7 @@ import {COLORS} from "../../assets/colors";
 
 declare var io: any; // import socket io
 declare var ace: any;
+const DEBUGMODE: boolean = false;
 
 @Injectable()
 export class CollaborationService {
@@ -17,7 +18,7 @@ export class CollaborationService {
 
     // receive change from server
     this.socket.on("changeText", (delta: string)=>{
-      console.log("rcv change text: \n" + delta);
+      if(DEBUGMODE) console.log("rcv change text: \n" + delta);
       delta = JSON.parse(delta);
       // !!!IMPORTANT:
       // editor.lastChangeLog = delta; is required at this position
@@ -29,7 +30,7 @@ export class CollaborationService {
     });
 
     this.socket.on("changeCursor", (cursor: string)=>{
-      console.log("rcv change cursor: \n" + cursor);
+      if(DEBUGMODE) console.log("rcv change cursor: \n" + cursor);
       cursor = JSON.parse(cursor);
       let id = cursor['socketID'];
       if(this.collaborators[id]){

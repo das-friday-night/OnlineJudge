@@ -19,7 +19,9 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.css"
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/bootstrap-social/bootstrap-social.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
@@ -37,6 +39,9 @@
       }
 
     }
+  ],
+  "addons":[
+    "../node_modules/bootstrap-social/assets/fonts/*.+(otf|eot|svg|ttf|woff|woff2)"
   ],
   "e2e": {
     "protractor": {

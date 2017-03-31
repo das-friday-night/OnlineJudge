@@ -18,7 +18,15 @@
           <input type="text" class="form-control" placeholder="Search" [formControl]="filterWord">
         </div>
       </form>
+
       <ul class="nav navbar-nav navbar-right">
+        <li>
+          <form class="navbar-form">
+            <a class="btn btn-block btn-social btn-github" href="https://github.com/siyuan-li/OnlineJudge">
+              <span class="fa fa-github"></span>Fork Me on Github
+            </a>
+          </form>
+        </li>
         <li>
           <form class="navbar-form">
             <button type="button" class="btn btn-primary" *ngIf="!auth.authenticated()" (click)="login()">Login</button>

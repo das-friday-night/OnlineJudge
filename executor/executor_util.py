@@ -5,6 +5,7 @@ import shutil
 
 from docker.errors import *
 
+DEBUGMODE = False
 IMAGE_NAME = "siyuanli/onlinejudge"
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMP_BUILD_DIR = "%s/tmp/" % CURRENT_DIR
@@ -67,10 +68,12 @@ def buildrun(code, lang):
             working_dir=source_file_guest_dir)
         # volumnes: mount source_file_host_dir to container dir source_file_guest_dir
         # working_dir: cd ${source_file_guest_dir}
-        print "5000***********: Source built SUCCESS."
+        if DEBUGMODE: 
+            print "5000***********: Source built SUCCESS."
         result['build'] = 'OK'
     except ContainerError as e:
-        print "5000***********: Source build FAILED!"
+        if DEBUGMODE:
+            print "5000***********: Source build FAILED!"
         result['build'] = e.stderr
         shutil.rmtree(source_file_host_dir)
         return result
@@ -82,10 +85,12 @@ def buildrun(code, lang):
             command="%s %s" % (EXECUTE_COMMANDS[lang], BINARY_FILE_NAMES[lang]),
             volumes = {source_file_host_dir: {'bind': source_file_guest_dir, 'mode': 'rw'}},
             working_dir=source_file_guest_dir)
-        print "5000***********: Executed SUCCESS."
+        if DEBUGMODE: 
+            print "5000***********: Executed SUCCESS."
         result['run'] = log
     except ContainerError as e:
-        print "5000***********: Executed FAILED!"
+        if DEBUGMODE:
+            print "5000***********: Executed FAILED!"
         result['run'] = e.stderr
         shutil.rmtree(source_file_host_dir)
         return result

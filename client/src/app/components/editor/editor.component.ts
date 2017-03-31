@@ -4,6 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {DataService} from "../../services/data.service";
 
 declare var ace: any; // import ace
+const DEBUGMODE: boolean = false;
 
 @Component({
   selector: 'app-editor',
@@ -54,8 +55,10 @@ export class EditorComponent implements OnInit {
 
     this.editor.on("change", (e)=>{
       let changeInfo = JSON.stringify(e);
-      console.log("editor.on(change):\n"+changeInfo);
-      console.log("editor.lastChangeLog:\n"+JSON.stringify(this.editor.lastChangeLog));
+      if(DEBUGMODE){
+        console.log("editor.on(change):\n"+changeInfo);
+        console.log("editor.lastChangeLog:\n"+JSON.stringify(this.editor.lastChangeLog));
+      }
       if(this.editor.lastChangeLog != e){
         this.editor.lastChangeLog = e;
         this.collaboration.change("text", changeInfo);
@@ -83,8 +86,6 @@ export class EditorComponent implements OnInit {
   }
 
   submit(){
-    // let user_code = this.editor.getValue();
-    // console.log(user_code);
     let testCode = {
       user_code: this.editor.getValue(),
       lang: this.lang.toLowerCase()

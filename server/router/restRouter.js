@@ -6,7 +6,9 @@ var jsonParser = require('body-parser').json();
 var node_rest_client = require('node-rest-client').Client;
 var rest_client = new node_rest_client();
 
-EXECUTOR_SERVER_URL = 'http://localhost:5000/buildrun';
+const EXECUTOR_SERVER_URL = 'http://localhost:5000/buildrun';
+const DEBUGMODE = false;
+
 rest_client.registerMethod('buildrun_POST', EXECUTOR_SERVER_URL, 'POST');
 
 router.get('/problems', function(req, res){
@@ -49,7 +51,7 @@ router.post('/buildrun', jsonParser, function(req, res){
             headers: {"Content-Type": "application/json"}
         },
         function (data, response) {
-            console.log("received response:\n" + response);
+            if(DEBUGMODE) console.log("received response:\n" + response);
             // we will put data in to build and run in executor server
             const text = `Build output:\n${data['build']}\nExecute output:\n${data['run']}`;
             res.json({text: text});

@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify
 import executor_util as eu
 app = Flask(__name__)
 
+DEBUGMODE = False
+
 @app.route("/")
 def hello():
     return "hello..hola..banana.."
@@ -14,7 +16,8 @@ def buildrun():
 		return "code/lang is missing!"
 	code = data['code']
 	lang = data['lang']
-	print "5000***********: REST: %s in %s language" % (code, lang)
+	if DEBUGMODE:
+		print "5000***********: REST: %s in %s language" % (code, lang)
 	result = eu.buildrun(code, lang)
 	return jsonify(result)
 
