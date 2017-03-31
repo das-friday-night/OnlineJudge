@@ -79,7 +79,7 @@ sudo pip install -r requirements.txt
 curl -fsSL https://get.docker.com/ | sh
 sudo usermod -aG docker $(whoami)
 ```
-14. reboot computer required for `usermod` to become effective, after reboot cd into OnlineJudge/executor/
+14. reboot computer required for `usermod` to become effective, *after reboot cd into OnlineJudge/executor/*
 ```
 sudo reboot
 docker build -t siyuanli/onlinejudge .
