@@ -5,7 +5,8 @@ import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable()
 export class DataService {
-  probs: Problem[] = [];
+  // probs: Problem[] = [];
+  // initialize BehaviorSubject with a empty array
   private problemsSource = new BehaviorSubject<Problem[]>([]);
 
   constructor(private http: Http) { }
@@ -18,6 +19,8 @@ export class DataService {
         this.problemsSource.next(res.json());
       })
       .catch(this.handleError);
+    
+    // asObservable(): return a copy of problemSource instead of a reference
     return this.problemsSource.asObservable();
   }
 

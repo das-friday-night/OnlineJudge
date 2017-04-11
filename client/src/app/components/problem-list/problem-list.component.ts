@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Problem} from '../../problems/problem.model';
 import {DataService} from "../../services/data.service";
 import {Subscription} from "rxjs";
@@ -21,5 +21,9 @@ export class ProblemListComponent implements OnInit {
       .subscribe(problems => this.problems = problems);
 
     this.probFilterService.getFilterWord().subscribe(word => this.filterWord = word);
+  }
+
+  ngOnDestory() {
+    this.subscriptionProblems.unsubscribe();
   }
 }
