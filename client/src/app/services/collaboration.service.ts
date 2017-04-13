@@ -14,6 +14,7 @@ export class CollaborationService {
 
   init(editor: any, problemID: string){
     // setup socket and send msg
+    // query is used for client-side server to identify: this socket is for which problem
     this.socket = io(window.location.origin, {query: 'problemID=' + problemID});
 
     // receive change from server

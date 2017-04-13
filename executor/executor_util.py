@@ -49,13 +49,21 @@ def load_image():
 def buildrun(code, lang):
     try:
         result = {'build': None, 'run': None}
+
+        # xyz
         source_file_parent_dir_name = uuid.uuid4()
+
+        # /.../tmp/xyz
         source_file_host_dir = "%s/%s" % (TEMP_BUILD_DIR, source_file_parent_dir_name)
+
+        # /test/xyz
         source_file_guest_dir = "/test/%s" % source_file_parent_dir_name
+
         os.makedirs(source_file_host_dir)
+
+        # /.../tmp/xyz/test.py
         with open("%s/%s" % (source_file_host_dir, SOURCE_FILE_NAMES[lang]), "w") as source_file:
             source_file.write(code)
-
     except OSError:
         print "5000***********:\n%s already exist" % source_file_host_dir
 
@@ -66,7 +74,7 @@ def buildrun(code, lang):
             command="%s %s" % (BUILD_COMMANDS[lang], SOURCE_FILE_NAMES[lang]),
             volumes = {source_file_host_dir: {'bind': source_file_guest_dir, 'mode': 'rw'}},
             working_dir=source_file_guest_dir)
-        # volumnes: mount source_file_host_dir to container dir source_file_guest_dir
+        # volumnes: mount source_file_host_dir(/.../tmp/xyz) to container dir source_file_guest_dir(/test/xyz)
         # working_dir: cd ${source_file_guest_dir}
         if DEBUGMODE: 
             print "5000***********: Source built SUCCESS."

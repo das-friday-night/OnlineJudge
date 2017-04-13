@@ -51,8 +51,11 @@ export class EditorComponent implements OnInit {
     this.resetEditor();
     // avoid bug when editor holds too many chars that out of buffer
     this.editor.$blockScrolling = Infinity;
+
+    // a custome property used to avoid "sequence of" duplicated actions
     this.editor.lastChangeLog = null;
 
+    // record event on editor content change
     this.editor.on("change", (e)=>{
       let changeInfo = JSON.stringify(e);
       if(DEBUGMODE){
@@ -65,6 +68,7 @@ export class EditorComponent implements OnInit {
       }
     });
 
+    // record event on editor cursor change
     this.editor.getSession().getSelection().on("changeCursor", ()=>{
       let cursor = this.editor.getSession().getSelection().getCursor();
       this.collaboration.change("cursor", JSON.stringify(cursor));
@@ -74,8 +78,12 @@ export class EditorComponent implements OnInit {
   }
 
   resetEditor() {
+    // set the programming language
     this.editor.getSession().setMode("ace/mode/"+this.aceModeName[this.lang]);
+
+    // fill the editor with default content at start
     this.editor.setValue(this.defaultContent[this.lang]);
+
     // move cursor to first line
     this.editor.gotoLine(0);
     this.output = "";
